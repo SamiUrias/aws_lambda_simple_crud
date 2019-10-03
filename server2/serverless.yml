@@ -25,6 +25,11 @@ plugins:
 provider:
   name: aws
   runtime: nodejs10.x
+  environment:
+  DATABASE_NAME: ${file(./config.json):DATABASE_NAME}
+  DATABASE_HOST: ${file(./config.json):DATABASE_HOST}
+  DATABASE_USER: ${file(./config.json):DATABASE_USER}
+  DATABASE_PASSWORD: ${file(./config.json):DATABASE_PASSWORD}
 
 # you can overwrite defaults here
 #  stage: dev

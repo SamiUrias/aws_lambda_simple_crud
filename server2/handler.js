@@ -1,6 +1,7 @@
 "use strict";
 //kenri@userlab.co
 const router = require("aws-lambda-router");
+const dbConnection = require('./dbConnection')
 // module.exports.hello = // handler for an api gateway event
 let books = [
   {
@@ -12,7 +13,24 @@ let books = [
     content: "Content2"
   }
 ];
+
+let authors = [
+  {
+    name: "Name1"
+  },
+  {
+    name: "Name 2"
+  }
+];
+
+let pool = null;
+dbConnection.createDatabasePool(pool).then(result => {
+  pool = result;
+})
+
 module.exports.hello = router.handler({
+    // var pool = null;
+    // pool = await dbConnection.createDatabasePool(pool);
     // for handling an http-call from an AWS API Gateway proxyIntegration we provide the following config:
     proxyIntegration: {
         routes: [

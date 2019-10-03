@@ -1,0 +1,6 @@
+{
+  "DATABASE_NAME": "samuelurias_userlab_test_mariadb",
+  "DATABASE_HOST": "localhost",
+  "DATABASE_USER": "root",
+  "DATABASE_PASSWORD": "admin"
+}
