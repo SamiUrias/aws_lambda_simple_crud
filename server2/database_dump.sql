@@ -52,7 +52,7 @@ CREATE TABLE `books` (
   `content` text DEFAULT NULL COMMENT 'Dummy content of the book',
   `author` int(11) DEFAULT NULL COMMENT 'Author Foreing key',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='This table stores the list of books\n';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='This table stores the list of books\n';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,7 +61,7 @@ CREATE TABLE `books` (
 
 LOCK TABLES `books` WRITE;
 /*!40000 ALTER TABLE `books` DISABLE KEYS */;
-INSERT INTO `books` VALUES (1,'Book1','Content1',1),(2,'Book2','Content2',2);
+INSERT INTO `books` VALUES (1,'Book1','Content1',1),(2,'Book2','Content2',2),(3,'Book4','Content4',1),(4,'Book55','Content5',1);
 /*!40000 ALTER TABLE `books` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -74,4 +74,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-02 20:32:56
+-- Dump completed on 2019-10-03  4:27:31

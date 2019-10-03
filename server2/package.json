@@ -13,6 +13,9 @@
     "serverless-offline": "^5.12.0"
   },
   "dependencies": {
-    "aws-lambda-router": "^0.6.2"
+    "aws-lambda-router": "^0.6.2",
+    "express": "^4.17.1",
+    "mysql": "^2.17.1",
+    "serverless-http": "^2.3.0"
   }
 }

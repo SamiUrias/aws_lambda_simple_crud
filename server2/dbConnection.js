@@ -1,15 +1,16 @@
 const mysql = require('mysql');
 
+let innerPool;
 /**
  * The purpose of this function is to create a new database pool.
  * @param pool
  * @returns {Pool}
  */
-const createDatabasePool = async ( pool )=> {
+const createDatabasePool = async (pool) => {
 
-    if ( pool === null || pool === undefined || pool === 'undefined') {
+    if ( (pool === null || pool === undefined || pool === 'undefined') && !innerPool) {
         try {
-            pool = await mysql.createPool({
+            innerPool = await mysql.createPool({
                 connectionLimit: 1,
                 connectTimeout  : 60 * 60 * 1000,
                 acquireTimeout  : 60 * 60 * 1000,
@@ -25,7 +26,7 @@ const createDatabasePool = async ( pool )=> {
 
     }
 
-    pool.getConnection((err, connection) => {
+    innerPool.getConnection((err, connection) => {
         if (err) {
             if (err.code === 'PROTOCOL_CONNECTION_LOST') {
                 console.error('Database connection was closed.')
@@ -39,15 +40,13 @@ const createDatabasePool = async ( pool )=> {
         }
 
         if (connection) connection.release();
-
-        return
     });
     console.log('The pool has been created successfully');
 
     setInterval(() => {
     }, 60000)
 
-    return pool;
+    return innerPool;
 };
 
 

@@ -2,6 +2,7 @@
 node_modules/
 server2/node_modules/
 jspm_packages
+.idea/
 
 # Serverless directories
 .serverless
