@@ -1,35 +1,34 @@
 const dbConnection = require('../../dbConnection')
 
-const  getBooks = async () =>  {
+const  getAuthors = async () =>  {
     let pool = await dbConnection.createDatabasePool();
     return await new Promise((resolve, reject) => {
-        let bookList =  pool.query('SELECT * FROM books', function (err, results) {
+        let bookList =  pool.query('SELECT * FROM authors', function (err, results) {
             if(err) {  reject(err);  }
             resolve(results);
         });
     })
 };
 
-const getSingleBook = async (paramsId) =>  {
-    console.log('Inside get single book');
+const getSingleAuthor = async (paramsId) =>  {
+    console.log('Inside get single book')
     let pool = await dbConnection.createDatabasePool();
     return await new Promise((resolve, reject) => {
-        let bookList =  pool.query(`SELECT * FROM books WHERE id = '${paramsId}'`, function (err, results) {
+        let bookList =  pool.query(`SELECT * FROM authors WHERE id = '${paramsId}'`, function (err, results) {
             if(err) {  reject(err);  }
             resolve(results);
         });
     })
 };
 
-const addBooks = async (bookObject) => {
+const addAuthors = async (authorObject) => {
     let pool = await dbConnection.createDatabasePool();
-    console.log('Inside addBooks', bookObject)
+    console.log('Inside addBooks', authorObject)
     let insertId = await new Promise( (resolve, reject) => {
 
-        let insertQuery = `INSERT INTO books (title, content, author) 
-                            values ('${bookObject.title}', 
-                                    '${bookObject.content}',
-                                    '${bookObject.author}'
+        let insertQuery = `INSERT INTO authors (name) 
+                            values ('${authorObject.name}'
+                                   
                             )`;
 
 
@@ -40,7 +39,7 @@ const addBooks = async (bookObject) => {
     });
 
 
-    let getInsertedElementQuery = `SELECT * FROM books WHERE id = ${insertId}`;
+    let getInsertedElementQuery = `SELECT * FROM authors WHERE id = ${insertId}`;
     return await new Promise((resolve, reject)=> {
         pool.query(getInsertedElementQuery, function (err, results) {
             if (err) {
@@ -51,15 +50,13 @@ const addBooks = async (bookObject) => {
     })
 };
 
-const updateBook = async (bookObject, paramsId) => {
+const updateAuthor = async (authorObject, paramsId) => {
     let pool = await dbConnection.createDatabasePool();
-    console.log('Inside updateBookModel', bookObject)
+    console.log('Inside updateBookModel', authorObject)
     let affectedRows = await new Promise( (resolve, reject) => {
 
         let updateQuery = `UPDATE books SET 
-                            title = '${bookObject.title}',
-                            content = '${bookObject.content}',
-                            author = '${bookObject.author}'
+                            name = '${authorObject.title}'
                           WHERE id = ${paramsId}`;
 
 
@@ -72,7 +69,7 @@ const updateBook = async (bookObject, paramsId) => {
     });
 
 
-    let getInsertedElementQuery = `SELECT * FROM books WHERE id = ${paramsId}`;
+    let getInsertedElementQuery = `SELECT * FROM authors WHERE id = ${paramsId}`;
     return await new Promise((resolve, reject)=> {
         pool.query(getInsertedElementQuery, function (err, results) {
             if (err) {
@@ -84,27 +81,27 @@ const updateBook = async (bookObject, paramsId) => {
 };
 
 
-const deleteBook = async (paramsId) =>  {
+const deleteSingleAuthor = async (paramsId) =>  {
     let pool = await dbConnection.createDatabasePool();
     console.log('D:', paramsId)
-    let singleBook = await getSingleBook(paramsId);
-    console.log('SB', singleBook)
+    let singleAuthor = await getSingleAuthor(paramsId);
+    console.log('SA', singleAuthor)
 
     await new Promise((resolve, reject) => {
         console.log(paramsId)
-        pool.query(`DELETE FROM books WHERE id = '${paramsId}'`, function (err, results) {
+        pool.query(`DELETE FROM authors WHERE id = '${paramsId}'`, function (err, results) {
             if(err) {  reject(err);  }
             resolve(results);
         });
     });
 
-    return singleBook;
+    return singleAuthor;
 };
 
 module.exports = {
-    addBooks,
-    getBooks,
-    getSingleBook,
-    updateBook,
-    deleteBook
+    addAuthors,
+    getAuthors,
+    getSingleAuthor,
+    updateAuthor,
+    deleteSingleAuthor
 };
