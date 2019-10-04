@@ -2,23 +2,63 @@ const dbConnection = require('../../dbConnection')
 
 const  getAuthors = async () =>  {
     let pool = await dbConnection.createDatabasePool();
-    return await new Promise((resolve, reject) => {
+    let authorsResults =  await new Promise((resolve, reject) => {
         let bookList =  pool.query('SELECT * FROM authors', function (err, results) {
             if(err) {  reject(err);  }
             resolve(results);
         });
-    })
+    });
+
+    let bookIndex = 0;
+    while(bookIndex <= authorsResults.length - 1) {
+        console.log(authorsResults[bookIndex]);
+        let books =  await new Promise((resolve, reject) => {
+
+            let query = `select books.* from books join booksauthors ba on books.id = ba.book where ba.author = '${authorsResults[bookIndex].id}'`;
+            console.log(query);
+            pool.query(query, function (err, results) {
+                if(err) {  reject(err);  }
+                resolve(results);
+            });
+        });
+
+        authorsResults[bookIndex].books = books;
+        bookIndex++
+    }
+
+    return authorsResults;
 };
 
 const getSingleAuthor = async (paramsId) =>  {
     console.log('Inside get single book')
     let pool = await dbConnection.createDatabasePool();
-    return await new Promise((resolve, reject) => {
+    let authorsResults =  await new Promise((resolve, reject) => {
         let bookList =  pool.query(`SELECT * FROM authors WHERE id = '${paramsId}'`, function (err, results) {
             if(err) {  reject(err);  }
             resolve(results);
         });
-    })
+    });
+
+    // Add the books list
+    console.log('here')
+    let bookIndex = 0;
+    while(bookIndex <= authorsResults.length - 1) {
+        console.log(authorsResults[bookIndex]);
+        let books =  await new Promise((resolve, reject) => {
+
+            let query = `select books.* from books join booksauthors ba on books.id = ba.book where ba.author = '${authorsResults[bookIndex].id}'`;
+            console.log(query);
+          pool.query(query, function (err, results) {
+                if(err) {  reject(err);  }
+                resolve(results);
+            });
+        });
+
+        authorsResults[bookIndex].books = books;
+        bookIndex++
+    }
+
+    return authorsResults
 };
 
 const addAuthors = async (authorObject) => {

@@ -1,19 +1,19 @@
 const model = require('./model');
 
-const getBooks = async () => {
+const getRelationship = async () => {
     try {
-        return await model.getBooks();
+        return await model.getRelationship();
     } catch (error) {
         console.error('[books controller]', error);
         return null;
     }
 };
 
-const getSingleBook = async (paramsId) => {
+const getSingleRelationship = async (bookId, authorId) => {
     return new Promise((resolve, reject) => {
 
         try{
-            resolve(model.getSingleBook(paramsId))
+            resolve(model.getSingleRelationship(bookId, authorId))
         } catch (e) {
             reject(e)
         }
@@ -21,47 +21,47 @@ const getSingleBook = async (paramsId) => {
     })
 };
 
-const addBooks = async (bookObject) => {
+const addRelationship = async (bookObject) => {
     console.log('Inside addBooks', bookObject)
 
-    if(!bookObject.title || !bookObject.content ) {
+    if(!bookObject.book || !bookObject.author ) {
         console.log('Insider rejection if')
         throw new Error('Invalid parameters');
     }
     return new Promise((resolve, reject) => {
         try {
-            resolve(model.addBooks(bookObject))
+            resolve(model.addRelationship(bookObject))
         } catch (e) {
             reject(e)
         }
     });
 };
 
-const updateBook = async (bookObject, paramsId) => {
+const updateRelationship = async (bookObject, bookId, authorId) => {
     console.log('Inside updateBook', bookObject)
 
-    if(!bookObject.title || !bookObject.content || !bookObject.author || !bookObject.author || !paramsId) {
+    if(!bookObject.book || !bookObject.author || !bookId || !authorId) {
         console.log('Insider rejection if')
         throw new Error('Invalid parameters');
     }
     return new Promise((resolve, reject) => {
         try {
-            resolve(model.updateBook(bookObject, paramsId))
+            resolve(model.updateRelationship(bookObject, paramsId))
         } catch (e) {
             reject(e)
         }
     });
 };
 
-const deleteSingleBook = async (paramsId) => {
+const deleteSingleRelationship = async (bookId, authorId) => {
     return new Promise((resolve, reject) => {
-        if( !paramsId ) {
+        if( !bookId || !authorId ) {
             console.log('Insider rejection if')
             throw new Error('Invalid parameters');
         }
 
         try{
-            resolve(model.deleteBook(paramsId))
+            resolve(model.deleteSingleRelationship(bookId, authorId))
         } catch (e) {
             reject(e)
         }
@@ -70,9 +70,9 @@ const deleteSingleBook = async (paramsId) => {
 };
 
 module.exports = {
-    addBooks,
-    getBooks,
-    getSingleBook,
-    updateBook,
-    deleteSingleBook
+    addRelationship,
+    getRelationship,
+    getSingleRelationship,
+    updateRelationship,
+    deleteSingleRelationship
 };

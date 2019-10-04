@@ -24,7 +24,7 @@ const getSingleBook = async (paramsId) => {
 const addBooks = async (bookObject) => {
     console.log('Inside addBooks', bookObject)
 
-    if(!bookObject.title || !bookObject.content || !bookObject.author) {
+    if(!bookObject.title || !bookObject.content ) {
         console.log('Insider rejection if')
         throw new Error('Invalid parameters');
     }

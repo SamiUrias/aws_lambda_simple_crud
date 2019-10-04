@@ -26,10 +26,9 @@ const addBooks = async (bookObject) => {
     console.log('Inside addBooks', bookObject)
     let insertId = await new Promise( (resolve, reject) => {
 
-        let insertQuery = `INSERT INTO books (title, content, author) 
+        let insertQuery = `INSERT INTO books (title, content) 
                             values ('${bookObject.title}', 
-                                    '${bookObject.content}',
-                                    '${bookObject.author}'
+                                    '${bookObject.content}'
                             )`;
 
 

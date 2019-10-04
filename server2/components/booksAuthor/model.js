@@ -1,71 +1,63 @@
 const dbConnection = require('../../dbConnection')
 
-const  getBooks = async () =>  {
+const  getRelationship = async () =>  {
     let pool = await dbConnection.createDatabasePool();
     return await new Promise((resolve, reject) => {
-        let bookList =  pool.query('SELECT * FROM books', function (err, results) {
+        let bookList =  pool.query('SELECT * FROM booksauthors', function (err, results) {
             if(err) {  reject(err);  }
             resolve(results);
         });
     })
 };
 
-const getSingleBook = async (paramsId) =>  {
-    console.log('Inside get single book');
+const getSingleRelationship = async (bookId, authorId) =>  {
+    console.log('Inside get single relationship');
     let pool = await dbConnection.createDatabasePool();
     return await new Promise((resolve, reject) => {
-        let bookList =  pool.query(`SELECT * FROM books WHERE id = '${paramsId}'`, function (err, results) {
+        let bookList =  pool.query(`SELECT * FROM booksauthors WHERE book = '${bookId}' and author = '${authorId}'`, function (err, results) {
             if(err) {  reject(err);  }
             resolve(results);
         });
     })
 };
 
-const addBooks = async (bookObject) => {
+const addRelationship = async (bookObject) => {
     let pool = await dbConnection.createDatabasePool();
     console.log('Inside addBooks', bookObject)
-    let insertId = await new Promise( (resolve, reject) => {
+    let results = await new Promise( (resolve, reject) => {
 
-        let insertQuery = `INSERT INTO books (title, content) 
-                            values ('${bookObject.title}', 
-                                    '${bookObject.content}'
+        let insertQuery = `INSERT INTO booksauthors (book, author) 
+                            values ('${bookObject.book}', 
+                                    '${bookObject.author}'
                             )`;
 
 
          pool.query(insertQuery, function (err, results) {
             if(err) {  reject(err);  }
-            resolve(results.insertId);
+            resolve(results);
         });
     });
 
+    console.log(results);
 
-    let getInsertedElementQuery = `SELECT * FROM books WHERE id = ${insertId}`;
-    return await new Promise((resolve, reject)=> {
-        pool.query(getInsertedElementQuery, function (err, results) {
-            if (err) {
-                reject(err);
-            }
-            resolve(results);
-        })
-    })
+    return await getSingleRelationship(bookObject.book, bookObject.author)
 };
 
-const updateBook = async (bookObject, paramsId) => {
+const updateRelationship = async (bookObject, bookId, authorId) => {
     let pool = await dbConnection.createDatabasePool();
     console.log('Inside updateBookModel', bookObject)
     let affectedRows = await new Promise( (resolve, reject) => {
 
-        let updateQuery = `UPDATE books SET 
-                            title = '${bookObject.title}',
-                            content = '${bookObject.content}',
+        let updateQuery = `UPDATE booksauthors SET 
+                            book = '${bookObject.book}',                      
                             author = '${bookObject.author}'
-                          WHERE id = ${paramsId}`;
+                          WHERE book = ${bookId} and author = ${authorId}`;
 
 
-        console.log(updateQuery)
+        console.log(updateQuery);
         pool.query(updateQuery, function (err, results) {
             if(err) {  reject(err);  }
-            console.log(results)
+            console.log(results);
             resolve(results.affectedRows);
         });
     });
@@ -83,27 +75,25 @@ const updateBook = async (bookObject, paramsId) => {
 };
 
 
-const deleteBook = async (paramsId) =>  {
+const deleteSingleRelationship = async (bookId, authorId) =>  {
     let pool = await dbConnection.createDatabasePool();
-    console.log('D:', paramsId)
-    let singleBook = await getSingleBook(paramsId);
-    console.log('SB', singleBook)
+    let singleRelationship = await getSingleRelationship(bookId, authorId);
+    console.log('SB', singleRelationship);
 
     await new Promise((resolve, reject) => {
-        console.log(paramsId)
-        pool.query(`DELETE FROM books WHERE id = '${paramsId}'`, function (err, results) {
+        pool.query(`DELETE FROM booksauthors WHERE book = '${bookId}' and author = '${authorId}'`, function (err, results) {
             if(err) {  reject(err);  }
             resolve(results);
         });
     });
 
-    return singleBook;
+    return singleRelationship;
 };
 
 module.exports = {
-    addBooks,
-    getBooks,
-    getSingleBook,
-    updateBook,
-    deleteBook
+    addRelationship,
+    getRelationship,
+    getSingleRelationship,
+    updateRelationship,
+    deleteSingleRelationship
 };
